@@ -1,0 +1,47 @@
+<!doctype html>
+
+
+    
+
+    <style>
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f4f4f4;
+        }
+    </style>
+
+
+
+    <div id="result"></div>
+
+    <script>
+        window.onload = function() {
+            const resultDiv = document.getElementById('result');
+
+            // Open the target URL using a proxy or API to fetch the page content
+            fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://socialblade.com/youtube/channel/UCyenuzat6MC_n5odNIHa56w'))
+            .then(response => response.json())
+            .then(data => {
+                // Extract the page content from the response
+                const pageContent = data.contents;
+
+                // Search for the numerical value next to "Video Views"
+                const regex = /Video Views[\s\S]+?(\d+(?:,\d{3})*)/g;
+                const matches = pageContent.match(regex);
+
+                if (matches) {
+                    const viewCount = matches[0].match(/(\d+(?:,\d{3})*)/)[0];
+                    resultDiv.innerHTML = `Video Views: ${viewCount}`;
+                } else {
+                    resultDiv.innerHTML = 'Could not find "Video Views" data.';
+                }
+            })
+            .catch(err => {
+                resultDiv.innerHTML = 'Error fetching data: ' + err.message;
+            });
+        };
+    </script>
+
+</!doctype>
